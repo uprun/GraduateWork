@@ -277,6 +277,7 @@ int main()
 		if(ch == 'o' || ch == 'O')
 		{
 			openTwoImages(left_image_file_path, right_image_file_path, left_img, right_img );
+			MergeTwoImages(left_img,right_img,merged_images);
 		}
 		// save both left and right images from camera
 		if(ch == 's' || ch == 'S')
