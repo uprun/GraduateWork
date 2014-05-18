@@ -1,0 +1,7 @@
+%YAML:1.0
+camera_inner_calibration_matrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: f
+   data: [ 7.39192078e+002, 0., 3.19500000e+002, 0., 7.39192078e+002,
+       2.39500000e+002, 0., 0., 1. ]

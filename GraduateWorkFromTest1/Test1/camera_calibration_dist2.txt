@@ -1,0 +1,8 @@
+%YAML:1.0
+# coeficients of distortions
+distor_coefs: !!opencv-matrix
+   rows: 5
+   cols: 1
+   dt: f
+   data: [ 1.70710742e-001, -5.56223392e-001, 7.05035543e-003,
+       -3.93267081e-004, 9.39838886e-001 ]
