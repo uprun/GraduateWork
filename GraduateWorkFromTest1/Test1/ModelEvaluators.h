@@ -6,7 +6,7 @@
 #include "SupportCode.h"
 const double penalty = 100000;
 
-enum ModelEvaluatorType {PAR_6_PROJ, PAR_7_PROJ, PAR_6_AND_LINE_TIMES_PROJ, PAR_7_AND_LINE_TIMES_PROJ};
+enum ModelEvaluatorType {PAR_6_PROJ, PAR_7_PROJ, PAR_6_AND_LINE_TIMES_PROJ, PAR_7_AND_LINE_TIMES_PROJ, PAR_7_AND_POINTS_IN_SPACE_PROJ};
 
 /* data structure to transmit data arays and fit model */
     typedef struct {
@@ -23,7 +23,10 @@ void evaluateModelWith6Params( const double *par, int m_dat,
 void evaluateModelWith6ParamsMinimizeLineDistance( const double *par, int m_dat,
         const void *data, double *fvec, int *userbreak );
 
-void evaluateModelWithPojectionDifferencesçPointsOnLines( const double *par, int m_dat,
+void evaluateModelWithPojectionDifferencesPointsOnLines( const double *par, int m_dat,
+        const void *data, double *fvec, int *userbreak );
+
+void evaluateModelPar7_WithProjectionDifferencesPointsOnLines( const double *par, int m_dat,
         const void *data, double *fvec, int *userbreak );
 
 #endif

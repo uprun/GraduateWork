@@ -38,6 +38,9 @@
 		case PAR_6_AND_LINE_TIMES_PROJ:
 			n_par = 6 + m_dat;
 			break;
+		case PAR_7_AND_LINE_TIMES_PROJ:
+			n_par = 7 + m_dat;
+			break;
 		}
 
         double* par = new double[n_par];
@@ -55,10 +58,10 @@
 		{
 			for(int i = 6; i < n_par; ++i)
 			{
-				par[i] = 0;
+				par[i] = 3;
 			}
 		}
-		if(modelType == PAR_7_PROJ)
+		if(modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 		{
 			double sh_x, sh_y, sh_z;
 
@@ -70,6 +73,13 @@
 			par[4] = 0;
 			par[5] = 0;
 			par[6] = 0;
+			if(modelType == PAR_7_AND_LINE_TIMES_PROJ)
+			{
+				for(int i = 7; i < n_par; ++i)
+				{
+					par[i] = 3;
+				}
+			}
 		}
 		 /* arbitrary starting value */
 
@@ -96,7 +106,11 @@
                &control, &status );
 			break;	
 		case PAR_6_AND_LINE_TIMES_PROJ:
-			lmmin( n_par, par, m_dat * 2, (const void*) &data, evaluateModelWithPojectionDifferencesçPointsOnLines,
+			lmmin( n_par, par, m_dat * 2, (const void*) &data, evaluateModelWithPojectionDifferencesPointsOnLines,
+               &control, &status );
+			break;
+		case PAR_7_AND_LINE_TIMES_PROJ:
+			lmmin( n_par, par, m_dat * 2, (const void*) &data, evaluateModelPar7_WithProjectionDifferencesPointsOnLines,
                &control, &status );
 			break;
 		}
@@ -135,6 +149,9 @@
 			data.n_par = 6;
 			
 			break;
+		case PAR_7_AND_LINE_TIMES_PROJ:
+			data.n_par = 7;
+			break;
 		}
 		mark = getMarkForModel(par, m_dat, &data, &userBreak);
 		double fmark = ((double)mark) / m_dat;
@@ -142,7 +159,7 @@
 
 		isPassed = false;
 		
-		cout<< "fnorm: "<< status.fnorm << " fmark: " << fmark  ;
+		cout<< "fnorm: "<< status.fnorm << " fmark: " << fmark << endl ;
 		if( (status.fnorm <= 25 * m_dat) && (fmark >= 0.7))
 		{
 			++passed;
@@ -150,20 +167,30 @@
 			{
 				cout <<" alpha: " << par[0] << " gamma: "<< par[1] << endl ;
 				cout << " f: " << par[2] << endl << " r_x: " << par[3] << endl << " r_y: " << par[4] << endl << " r_z: " << par[5] << endl;
-			}
-			if(modelType == PAR_6_AND_LINE_TIMES_PROJ)
-			{
-				cout<< "Line Times:"<<endl;
-				for(int k = 6; k < n_par; k++)
+				if(modelType == PAR_6_AND_LINE_TIMES_PROJ)
 				{
-					cout <<"t["<< k - 6 <<"]= " << par[k] << "; ";
+					cout<< "Line Times:"<<endl;
+					for(int k = 6; k < n_par; k++)
+					{
+						cout <<"t["<< k - 6 <<"]= " << par[k] << "; ";
+					}
+					cout << endl;
 				}
-				cout << endl;
 			}
-			if( modelType == PAR_7_PROJ)
+			
+			if( modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 			{
 				cout <<" shift x: " << par[0] << " shift y: "<< par[1] << " shift z: "<< par[2] << endl ;
 				cout << " f: " << par[3] << endl << " r_x: " << par[4] << endl << " r_y: " << par[5] << endl << " r_z: " << par[6] << endl;
+				if(modelType == PAR_7_AND_LINE_TIMES_PROJ)
+				{
+					cout<< "Line Times:"<<endl;
+					for(int k = 7; k < n_par; k++)
+					{
+						cout <<"t["<< k - 7 <<"]= " << par[k] << "; ";
+					}
+					cout << endl;
+				}
 			}
 			isPassed = true;	
 		}
@@ -195,7 +222,7 @@
 
 		double sh_x, sh_y, sh_z, f, r_x, r_y, r_z, alpha, gamma;
 		int n_par = D->n_par;
-		if( modelType == PAR_7_PROJ)
+		if( modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 		{
 			sh_x = par[0];
 			sh_y = par[1];
@@ -225,7 +252,7 @@
 		{
 			translate = GenerateTranslate(alpha, gamma);
 		}
-		if( modelType == PAR_7_PROJ)
+		if( modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 		{
 			translate = GenerateTranslate(sh_x, sh_y, sh_z);
 		}
@@ -490,7 +517,7 @@
 		int row, column;
 		row = 0;
 		
-		ModelEvaluatorType modelType = PAR_6_AND_LINE_TIMES_PROJ;
+		ModelEvaluatorType modelType = PAR_7_AND_LINE_TIMES_PROJ;
 
 		for(double a = leftAlpha; a <= rightAlpha; a += step, row++)
 		{
@@ -507,7 +534,7 @@
 					testAlpha = paramsFromTest[0];
 					testGamma = paramsFromTest[1];
 				}
-				if( modelType == PAR_7_PROJ)
+				if( modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 				{
 					ConvertTranslationCoordinatesToAngles(testAlpha, testGamma,
 						paramsFromTest[0],
@@ -617,7 +644,7 @@
 			testAlpha = paramsFromTest[0];
 			testGamma = paramsFromTest[1];
 		}
-		if( modelType == PAR_7_PROJ)
+		if( modelType == PAR_7_PROJ || modelType == PAR_7_AND_LINE_TIMES_PROJ)
 		{
 			ConvertTranslationCoordinatesToAngles(testAlpha, testGamma,
 				paramsFromTest[0],

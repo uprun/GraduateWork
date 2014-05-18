@@ -3,4 +3,4 @@ current_transpose_vector: !!opencv-matrix
    rows: 3
    cols: 1
    dt: f
-   data: [ 8.95870268e-001, -2.30896145e-001, 3.79608959e-001 ]
+   data: [ -9.95161533e-001, 9.78782848e-002, 8.55984353e-003 ]

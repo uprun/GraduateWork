@@ -570,7 +570,7 @@ int main()
 			// start process of determination parameters of model and reconstruction of scene
 			cv::Mat mat_left_img(left_img, true);
 			cv::Mat mat_right_img(right_img, true);
-			mainLevenbergMarkvardt_LMFIT(100, "currentPLYExportFile", left_points, right_points, 
+			mainLevenbergMarkvardt_LMFIT(350, "currentPLYExportFile", left_points, right_points, 
 				mat_left_img, mat_right_img,
 				forReconstructionLeftPoints, forReconstructionRightPoints);
 			mat_left_img.release();
