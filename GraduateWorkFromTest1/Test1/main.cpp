@@ -256,6 +256,8 @@ int main()
 	//CvMemStorage *mem_stor=cvCreateMemStorage(0);*/
 	float min_hessian_value=1001.0f;
 
+	double startValueOfFocus = 350;
+
 	char* left_image_file_path = "camera_picture_left.png";
 	char* right_image_file_path = "camera_picture_right.png";
 
@@ -570,7 +572,7 @@ int main()
 			// start process of determination parameters of model and reconstruction of scene
 			cv::Mat mat_left_img(left_img, true);
 			cv::Mat mat_right_img(right_img, true);
-			mainLevenbergMarkvardt_LMFIT(350, "currentPLYExportFile", left_points, right_points, 
+			mainLevenbergMarkvardt_LMFIT(startValueOfFocus, "currentPLYExportFile", left_points, right_points, 
 				mat_left_img, mat_right_img,
 				forReconstructionLeftPoints, forReconstructionRightPoints);
 			mat_left_img.release();
@@ -729,7 +731,7 @@ int main()
 		{
 			cv::Mat mat_left_img(left_img, true);
 			cv::Mat mat_right_img(right_img, true);
-			mainLevenbergMarkvardt_LMFIT(350, "currentPLYExportFile", left_points, right_points, 
+			mainLevenbergMarkvardt_LMFIT(startValueOfFocus, "currentPLYExportFile", left_points, right_points, 
 				mat_left_img, mat_right_img,
 				forReconstructionLeftPoints, forReconstructionRightPoints);
 			mat_left_img.release();
