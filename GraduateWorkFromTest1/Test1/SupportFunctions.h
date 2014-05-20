@@ -155,6 +155,7 @@ void findFundamentalMatrixAndCorrespondingPointsForReconstruction(
 	IplImage* &gray_img_right,
 	Array &forReconstructionLeftPoints,
 	Array &forReconstructionRightPoints,
-	double min_hessian_value);
+	double min_hessian_value,
+	double min_hessian_value_for_recosntruction_scene = 350);
 
 #endif

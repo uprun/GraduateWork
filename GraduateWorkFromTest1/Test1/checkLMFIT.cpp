@@ -16,10 +16,13 @@
 	
 	int passed = 0;
 
-	void testFromInitialData( double alpha, double gamma, double focus, double* &parResult, bool &isPassed, Array& left_points, Array &right_points,
+	void testFromInitialData( double alpha, double gamma, double focus, double* &parResult, int &n_par, bool &isPassed, Array& left_points, Array &right_points,
 		double imageWidth,
 		double imageHeight,
-		ModelEvaluatorType modelType, int &n_par)
+		ModelEvaluatorType modelType,
+		double &fnorm,
+		double &fmark
+		)
 	{
 		/*Array left_points, right_points;
 		parseYAML("image_accepted_points_left.txt", left_points);
@@ -154,7 +157,8 @@
 			break;
 		}
 		mark = getMarkForModel(par, m_dat, &data, &userBreak);
-		double fmark = ((double)mark) / m_dat;
+		fmark = ((double)mark) / m_dat;
+		fnorm = status.fnorm;
 		//printf("obtained mark:\n  %12g  =(%d / %d)\n", fmark, mark, m_dat );
 
 		isPassed = false;
@@ -485,7 +489,7 @@
 		double leftAlpha = -accPi, rightAlpha = accPi;
 		double leftGamma = -accPi / 2, rightGamma = accPi / 2;
 
-		double step = 0.3;
+		double step = 0.6;
 		int n_par = -1;
 		double *paramsFromTest = 0;
 		//double focus = 1;
@@ -504,6 +508,7 @@
 
 		int *coordinatesOfValidModels = new int[alphaSize * gammaSize];
 		int *movesOfModels = new int[alphaSize * gammaSize];
+		double *map_fnorm = new double [alphaSize * gammaSize];
 		pair<double, double> *initial_params = new pair<double, double>[alphaSize * gammaSize];
 
 		for( int i = 0 ; i < alphaSize; ++i)
@@ -512,6 +517,7 @@
 			{
 				coordinatesOfValidModels[i * gammaSize + j] = 0;
 				movesOfModels[i * gammaSize + j] = 0;
+				map_fnorm[i * gammaSize + j] = 0;
 			}
 		}
 		int row, column;
@@ -527,7 +533,9 @@
 				cout << "========================="<< endl;
 				initial_params[row* gammaSize + column] = pair<double, double>(a, g);
 				cout << "start alpha: " << row << " start gamma: " << column << endl;
-				testFromInitialData(a, g, focus, paramsFromTest, isPassed, left_points, right_points, leftImage.cols ,leftImage.rows, modelType, n_par);
+				double fmark, fnorm ;
+				testFromInitialData(a, g, focus, paramsFromTest, n_par, isPassed, left_points, right_points, leftImage.cols ,leftImage.rows, modelType,
+					fnorm, fmark);
 				double testAlpha, testGamma;
 				if( modelType == PAR_6_PROJ || modelType == PAR_6_AND_LINE_TIMES_PROJ)
 				{
@@ -554,6 +562,7 @@
 					cout<< "xAlpha: "<< xAlpha << " xGamma: " << xGamma<<endl;
 					coordinatesOfValidModels[xAlpha* gammaSize + xGamma]++;
 					movesOfModels[row* gammaSize + column] = currentFinishValue;
+					map_fnorm[row* gammaSize + column] += fnorm;
 				}
 				else
 				{
@@ -569,7 +578,25 @@
 		{
 			for( int j = 0; j < gammaSize; ++j)
 			{
-				cout<<std::setw(5)<< coordinatesOfValidModels[i* gammaSize + j];
+				cout<<std::setw(6)<< coordinatesOfValidModels[i* gammaSize + j];
+			}
+			cout<< endl;
+		}
+		cout<< "map of norm values: " << endl;
+		for( int i = 0 ; i < alphaSize; ++i)
+		{
+			for( int j = 0; j < gammaSize; ++j)
+			{
+				int total_count = coordinatesOfValidModels[i* gammaSize + j];
+				if(total_count > 0)
+				{
+					cout<<std::setw(6) << fixed << setprecision(3) << map_fnorm[i* gammaSize + j] /  total_count ;
+				}
+				else
+				{
+					cout<<std::setw(6) << "=" ;
+				}
+				
 			}
 			cout<< endl;
 		}
@@ -579,7 +606,8 @@
 		{
 			for( int j = 0; j < gammaSize; ++j)
 			{
-				cout<<std::setw(5) <<movesOfModels[i* gammaSize + j] ;
+				int current_value = movesOfModels[i* gammaSize + j];
+				cout<<std::setw(6) << current_value / gammaSize << "|" << current_value % gammaSize;
 			}
 			cout<< endl;
 		}
@@ -636,7 +664,9 @@
 		double alpha = selected_initial_params.first; //leftAlpha + step * (maxI);
 		double gamma = selected_initial_params.second; //leftGamma + step * (maxJ);
 		cout << "Alpha: " << alpha << " Gamma: " << gamma << endl;
-		testFromInitialData(alpha, gamma, focus, paramsFromTest, isPassed, left_points, right_points, leftImage.cols ,leftImage.rows, modelType, n_par);
+		double f_norm, f_mark;
+		testFromInitialData(alpha, gamma, focus, paramsFromTest, n_par, isPassed, left_points,
+			right_points, leftImage.cols ,leftImage.rows, modelType, f_norm, f_mark);
 
 		double testAlpha, testGamma;
 		if( modelType == PAR_6_PROJ || modelType == PAR_6_AND_LINE_TIMES_PROJ)
@@ -690,6 +720,7 @@
 		delete[] coordinatesOfValidModels;
 		delete[] movesOfModels;
 		delete[] initial_params;
+		delete[] map_fnorm;
         
 
         return 0;

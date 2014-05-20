@@ -1254,7 +1254,7 @@ void getAcceptedCorrespondingsForReconstructionScene(
 			double mark_1_5 = median - 1.5 * SD - compValue;
 
 			acceptedForReconstructionLeftToRightCorrespondings[i] = true;
-			if(compValue > 0.62 && countOfMatches >= 6 && mark_1_5 < 0)
+			if(compValue > 0.901 && countOfMatches >= 6 && mark_1_5 < 0)
 			{
 				acceptedForReconstructionLeftToRightCorrespondings[i] = false;
 			}
@@ -1427,7 +1427,8 @@ void findFundamentalMatrixAndCorrespondingPointsForReconstruction(
 	IplImage* &gray_img_right,
 	Array &forReconstructionLeftPoints,
 	Array &forReconstructionRightPoints,
-	double min_hessian_value)
+	double min_hessian_value,
+	double min_hessian_value_for_recosntruction_scene)
 {
 	int count= myMin(30, left_to_right_corresponding_points.size());
 
@@ -1604,7 +1605,7 @@ void findFundamentalMatrixAndCorrespondingPointsForReconstruction(
 				left_to_right_corresponding_points.clear();
 				right_to_left_corresponding_points.clear();
 
-				SurfFeatureDetector detector( 200, 5, 3 );
+				SurfFeatureDetector detector( min_hessian_value_for_recosntruction_scene, 5, 3 );
 				SurfDescriptorExtractor extractor;
 
 				//proceed left
@@ -1669,6 +1670,8 @@ void findFundamentalMatrixAndCorrespondingPointsForReconstruction(
 					forReconstructionLeftPoints,
 					forReconstructionRightPoints
 					);
+
+				cout<< "Count of points for reconstruction :" << forReconstructionLeftPoints.rows << endl;
 
 				delete[] acceptedForReconstructionLeftToRightCorrespondings;
 
