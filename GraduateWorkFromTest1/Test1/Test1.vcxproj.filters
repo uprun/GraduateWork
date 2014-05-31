@@ -51,9 +51,6 @@
     <ClCompile Include="SupportCode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lev_mar\lmdemo.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InitAndIOFuncs.h">

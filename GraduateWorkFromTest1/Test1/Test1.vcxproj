@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClCompile Include="checkLMFIT.cpp" />
     <ClCompile Include="InitAndIOFuncs.cpp" />
-    <ClCompile Include="lev_mar\lmdemo.c" />
     <ClCompile Include="libLMFIT\lmcurve.c" />
     <ClCompile Include="libLMFIT\lmmin.c" />
     <ClCompile Include="main.cpp" />
@@ -88,13 +87,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\lev_mar;.\libLMFIT;$(OPENCV_DIR)\..\..\include\;$(OPENCV_DIR)\..\..\include\opencv\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\libLMFIT;$(OPENCV_DIR)\..\..\include\;$(OPENCV_DIR)\..\..\include\opencv\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>.\lev_mar;$(OPENCV_DIR)\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>levmar.lib;opencv_core248d.lib;opencv_imgproc248d.lib;opencv_highgui248d.lib;opencv_ml248d.lib;opencv_video248d.lib;opencv_features2d248d.lib;opencv_calib3d248d.lib;opencv_objdetect248d.lib;opencv_contrib248d.lib;opencv_legacy248d.lib;opencv_flann248d.lib;opencv_nonfree248d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENCV_DIR)\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_core248d.lib;opencv_imgproc248d.lib;opencv_highgui248d.lib;opencv_ml248d.lib;opencv_video248d.lib;opencv_features2d248d.lib;opencv_calib3d248d.lib;opencv_objdetect248d.lib;opencv_contrib248d.lib;opencv_legacy248d.lib;opencv_flann248d.lib;opencv_nonfree248d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
