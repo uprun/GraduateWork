@@ -545,7 +545,7 @@ int main()
 				gray_img_right,
 				forReconstructionLeftPoints,
 				forReconstructionRightPoints,
-				min_hessian_value);
+				min_hessian_value, 450);
 			// selecting points for finding model parameters
 
 			int sizeOfAccepptedLeftToRightCorrespondings = left_to_right_corresponding_points.size();
